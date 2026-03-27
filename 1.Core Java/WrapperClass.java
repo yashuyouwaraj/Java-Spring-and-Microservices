@@ -1,7 +1,10 @@
-public class BoxingAndUnboxing {
+public class WrapperClass {
     public static void main(String[] args) {
         int num = 10;
         // Boxing: Converting primitive int to Integer object
+
+        //Integer num1=new Integer(num);     //boxing
+
         Integer boxedNum= num; // Automatic boxing
 
         int num2= num; // Unboxing: Converting Integer object back to primitive int

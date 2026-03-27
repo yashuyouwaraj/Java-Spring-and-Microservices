@@ -37,24 +37,24 @@ public class ThisAndSuperMethod {
 
 
 //this()
-class A{
-    public A(){
+class A7{
+    public A7(){
         super();
         System.out.println("in A constructor");
     }
-    public A(int n){
+    public A7(int n){
         super();
         System.out.println("in A parameterized constructor");
     }
 }
 
-class  B extends A{
-    public B(){
+class  B7 extends A7{
+    public B7(){
         super();
         System.out.println("in B constructor");
     }
 
-    public B(int n){
+    public B7(int n){
         this(); //call constructor of same class
         System.out.println("in B parameterized constructor");
     }
@@ -63,7 +63,7 @@ class  B extends A{
 public class ThisAndSuperMethod {
     public static void main(String[] args) {
         // B obj = new B();
-        B obj1 = new B(5);
+        B7 obj1 = new B7(5);
     }
 }
 

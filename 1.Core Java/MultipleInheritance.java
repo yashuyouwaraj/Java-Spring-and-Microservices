@@ -1,8 +1,8 @@
-class A{
+class A4{
 
 }
 
-class B extends A{
+class B4 extends A4{
 
 }
 
@@ -11,7 +11,7 @@ class B extends A{
 // Due to Ambiguity issue
 // }
 
-class C extends B{
+class C4 extends B4{
 
 }
 

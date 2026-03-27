@@ -1,4 +1,4 @@
-class A{
+class A5{
     public void show(){
         System.out.println("in A show");
     }
@@ -7,7 +7,7 @@ class A{
     }
 }
 
-class B extends A{
+class B5 extends A5{
     public void show(){
         System.out.println("in B show");
     }
@@ -18,7 +18,7 @@ class B extends A{
 
 public class MethodOverriding {
     public static void main(String[] args) {
-        B objB = new B();
+        B5 objB = new B5();
 
         objB.show(); // Calls B's show method
         objB.display(5); // Calls B's display method

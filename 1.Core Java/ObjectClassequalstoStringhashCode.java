@@ -1,4 +1,4 @@
-class Laptop{
+class Laptop1{
     String model;
     int price;
 
@@ -13,25 +13,24 @@ class Laptop{
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        Laptop laptop = (Laptop) obj;
-        return price == laptop.price && model.equals(laptop.model);
+        Laptop1 laptop1 = (Laptop1) obj;
+        return price == laptop1.price && model.equals(laptop1.model);
     }
 }
 
 public class ObjectClassequalstoStringhashCode {
 
     public static void main(String[] args) {
-        Laptop obj = new Laptop();
+        Laptop1 obj = new Laptop1();
         obj.model = "Dell";
         obj.price = 50000;
 
-        Laptop obj2=new Laptop();
-    	obj2.model="Lenevo Yoga";
- //   	obj2.model="Lenevo Yoga1";
-    	obj2.price=1000;
-    	
-    	boolean result = obj.equals(obj2);
-    	
+        Laptop1 obj2 = new Laptop1();
+        obj2.model = "Lenevo Yoga";
+        obj2.price = 1000;
+
+        boolean result = obj.equals(obj2);
+
     	System.out.println(obj.toString());
 //   	System.out.println(obj);
         System.out.println(result);

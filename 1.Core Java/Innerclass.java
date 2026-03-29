@@ -1,4 +1,4 @@
-class Student {
+class Student2 {
     int age;
 
     public void show() {
@@ -21,13 +21,13 @@ class Student {
 
 public class Innerclass {
     public static void main(String[] args) {
-        Student obj = new Student();
+        Student2 obj = new Student2();
         obj.show();
 
         // Student.Address obj2 = obj.new Address();
         // obj2.config();
 
-        Student.Address obj1 = new Student.Address();
+        Student2.Address obj1 = new Student2.Address();
         obj1.config();
     }
 }

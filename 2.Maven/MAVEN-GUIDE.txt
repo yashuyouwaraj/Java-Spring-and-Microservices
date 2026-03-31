@@ -1,0 +1,976 @@
+================================================================================
+                           COMPREHENSIVE MAVEN GUIDE
+================================================================================
+
+TABLE OF CONTENTS:
+1. What is Maven?
+2. Why Use Maven?
+3. Maven Installation & Setup
+4. How to Create a Maven Project
+5. Maven Project Structure
+6. Understanding pom.xml
+7. Maven Commands
+8. Maven Lifecycle
+9. Dependency Management
+10. Multi-Module Projects
+11. Project Analysis in This Folder
+12. Best Practices
+
+================================================================================
+1. WHAT IS MAVEN?
+================================================================================
+
+Maven is a build automation and project management tool primarily used for Java 
+projects. The word "Maven" means "expert" or "accumulator of knowledge."
+
+Key Definition:
+- Maven is a tool that describes how software is built and provides uniform 
+  build processes across projects
+- It uses Convention Over Configuration (CoC) philosophy
+- Version: Apache Maven 3.9.x is the current stable version
+
+Core Concept:
+Maven manages:
+  • Compilation (Java source code to bytecode)
+  • Testing (running unit tests)
+  • Packaging (creating JAR, WAR, or other artifacts)
+  • Deployment (pushing artifacts to repositories)
+  • Documentation (generating project documentation)
+
+================================================================================
+2. WHY USE MAVEN?
+================================================================================
+
+PROBLEMS WITHOUT MAVEN (without build automation):
+  ✗ Manual JAR file downloads and management
+  ✗ Version conflicts between libraries
+  ✗ No standardized build process across projects
+  ✗ Difficult to manage transitive dependencies
+  ✗ Time-consuming manual compilation and testing
+  ✗ No easy way to track project structure
+  ✗ Build failures in different environments
+
+SOLUTIONS WITH MAVEN:
+  ✓ Automated Dependency Management
+    - Maven downloads required libraries automatically
+    - Handles transitive dependencies (dependencies of dependencies)
+    - Resolves version conflicts
+
+  ✓ Standardized Project Structure
+    - Same layout across all Maven projects
+    - Easy to understand new projects immediately
+    - Tools can assume this structure
+
+  ✓ Plugin Ecosystem
+    - Extensible through hundreds of plugins
+    - Compile, test, deploy, document automatically
+    - Custom plugins for specific needs
+
+  ✓ Build Reproducibility
+    - Same build result across different machines
+    - CI/CD pipeline integration
+    - Version control friendly
+
+  ✓ Easy Integration
+    - Works with IDEs (IntelliJ, Eclipse, VS Code)
+    - Integrates with Jenkins, GitLab CI, GitHub Actions
+    - Docker and containerization support
+
+  ✓ Central Repository
+    - Access to 9+ million open source libraries
+    - Maven Central Repository has most Java libraries
+    - Private repositories for enterprise use
+
+================================================================================
+3. MAVEN INSTALLATION & SETUP
+================================================================================
+
+INSTALLATION STEPS (Windows):
+
+Step 1: Download Maven
+  - Visit: https://maven.apache.org/download.cgi
+  - Download: apache-maven-3.9.x-bin.zip (Binary archive)
+
+Step 2: Extract
+  - Extract to a folder (e.g., C:\maven or D:\tools\maven)
+
+Step 3: Set Environment Variables
+  - Open System Properties > Environment Variables
+  - Add New User Variable:
+    Variable name:  MAVEN_HOME
+    Variable value: C:\maven (or your installation path)
+  
+  - Edit Path variable:
+    Add: %MAVEN_HOME%\bin
+
+Step 4: Verify Installation
+  - Open Command Prompt/PowerShell
+  - Run: mvn -version
+  - Output should show: Apache Maven 3.9.x and Java version
+
+CONFIGURATION:
+
+Maven Settings File:
+  - Location: %USERPROFILE%\.m2\settings.xml
+  - Controls: repositories, proxies, servers, profiles
+  - If file doesn't exist, Maven uses built-in defaults
+
+Maven Repository Locations:
+  - Local Repository: %USERPROFILE%\.m2\repository
+    (caches downloaded dependencies on your machine)
+  - Remote Repository: https://repo.maven.apache.org/maven2
+    (Maven Central - main library source)
+
+================================================================================
+4. HOW TO CREATE A MAVEN PROJECT
+================================================================================
+
+METHOD 1: Using Maven Archetype (Template)
+============================================
+
+Command:
+  mvn archetype:generate -DgroupId=com.example -DartifactId=my-app \
+    -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+
+Parameters:
+  -DgroupId          = Package name (com.example)
+  -DartifactId       = Project name (my-app)
+  -DarchetypeArtifactId = Template type
+  -DinteractiveMode  = false (non-interactive)
+
+Result:
+  my-app/
+  ├── pom.xml
+  └── src/
+      ├── main/java/com/example/
+      │   └── App.java
+      └── test/java/com/example/
+          └── AppTest.java
+
+METHOD 2: Create Manually
+=========================
+
+1. Create project folder
+2. Create pom.xml with basic structure:
+
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>my-app</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+  </properties>
+
+  <dependencies>
+    <!-- Add dependencies here -->
+  </dependencies>
+</project>
+
+3. Create directory structure:
+  src/main/java/com/example/
+  src/test/java/com/example/
+
+METHOD 3: Clone from IDE
+========================
+
+Using IntelliJ IDEA:
+  File > New > Project > Maven
+  - Fill in GroupId, ArtifactId, Version
+  - Select archetype (quickstart recommended)
+  - Click Generate
+
+Using Eclipse:
+  File > New > Maven Project
+  - Select maven-archetype-quickstart
+  - Fill coordinates
+
+Using VS Code:
+  - Install Maven for Java extension
+  - Command Palette > Maven: Generate from Archetype
+
+================================================================================
+5. MAVEN PROJECT STRUCTURE
+================================================================================
+
+Standard Directory Layout:
+
+my-app/
+│
+├── pom.xml                              # Maven configuration file
+├── README.md                            # Project documentation
+├── .gitignore                           # Git ignore rules
+│
+├── src/
+│   │
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/example/
+│   │   │       ├── App.java
+│   │   │       ├── service/
+│   │   │       ├── controller/
+│   │   │       └── model/
+│   │   │
+│   │   ├── resources/
+│   │   │   ├── application.properties
+│   │   │   ├── logback.xml
+│   │   │   └── db/
+│   │   │       └── schema.sql
+│   │   │
+│   │   └── webapp/                      # For web projects (WAR)
+│   │       ├── index.html
+│   │       ├── css/
+│   │       ├── js/
+│   │       └── WEB-INF/
+│   │           └── web.xml
+│   │
+│   └── test/
+│       ├── java/
+│       │   └── com/example/
+│       │       ├── AppTest.java
+│       │       ├── service/
+│       │       └── controller/
+│       │
+│       └── resources/
+│           ├── application-test.properties
+│           └── test-data.sql
+│
+├── target/                              # Generated output (temporary)
+│   ├── classes/                         # Compiled classes
+│   ├── test-classes/
+│   └── my-app-1.0.jar                   # Packaged JAR
+│
+└── .m2/                                 # Local Maven cache (user home)
+    └── repository/                      # Downloaded dependencies
+
+DIRECTORY PURPOSES:
+
+src/main/java         - Production source code
+src/main/resources    - Configuration files, templates, property files
+src/test/java         - Unit tests, integration tests
+src/test/resources    - Test data, test configuration files
+target/               - Build output (created by Maven, should be .gitignored)
+
+MAVEN CONVENTION (Key Principle):
+
+Maven assumes this structure. You DON'T need to configure paths because:
+  - Maven expects sources in src/main/java
+  - Maven expects tests in src/test/java
+  - Maven expects resources in src/main/resources
+
+This standardization means:
+  - New developers instantly understand the structure
+  - IDEs can auto-configure
+  - Plugins work without extra setup
+
+================================================================================
+6. UNDERSTANDING POM.XML
+================================================================================
+
+POM = Project Object Model
+The pom.xml file is Maven's configuration file. It describes:
+  • Project identity (groupId, artifactId, version)
+  • Project dependencies
+  • Build plugins and configuration
+  • Build profiles
+
+BASIC POM.XML STRUCTURE:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  <modelVersion>4.0.0</modelVersion>
+  
+  <!-- PROJECT IDENTITY -->
+  <groupId>com.example</groupId>
+  <artifactId>my-app</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>  <!-- jar (default), war, pom, ear -->
+  
+  <name>My Application</name>
+  <description>A simple Maven application</description>
+  <url>https://example.com</url>
+  
+  <!-- PROJECT PROPERTIES -->
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <!-- DEPENDENCIES -->
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>  <!-- only for testing -->
+    </dependency>
+    
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <version>3.0.0</version>
+      <scope>compile</scope>  <!-- default, included in JAR -->
+    </dependency>
+  </dependencies>
+  
+  <!-- BUILD CONFIGURATION -->
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.10.1</version>
+        <configuration>
+          <source>17</source>
+          <target>17</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
+</project>
+```
+
+KEY ELEMENTS EXPLAINED:
+
+groupId: 
+  - Unique identifier for organization (reverse domain name)
+  - Example: com.example, org.springframework, junit
+  - Creates package structure when generating projects
+
+artifactId:
+  - Name of the project/library
+  - Must be lowercase, no spaces
+  - Example: my-app, spring-core, junit
+
+version:
+  - Project version number
+  - Format: MAJOR.MINOR.PATCH[-SNAPSHOT|-RELEASE]
+  - Example: 1.0.0, 2.1.3-SNAPSHOT, 3.0-RELEASE
+  - SNAPSHOT = development version (unstable)
+  - RELEASE = stable, production-ready version
+
+packaging:
+  - jar (default) = Java Archive, runnable program
+  - war = Web Archive, for web applications
+  - pom = Parent project (multi-module)
+  - ear = Enterprise Archive (enterprise apps)
+
+scope:
+  - compile (default) = included in runtime
+  - test = only for running tests, not in final JAR
+  - provided = supplied by runtime environment (like servlet-api)
+  - runtime = needed at runtime but not compile time
+  - system = manually supplied JAR file
+
+properties:
+  - Maven variables used in pom.xml
+  - syntax: ${property.name}
+  - Useful for version management and configuration
+
+DEPENDENCY EXAMPLE:
+
+<dependency>
+  <groupId>org.apache.commons</groupId>
+  <artifactId>commons-lang3</artifactId>
+  <version>3.12.0</version>
+</dependency>
+
+This dependency means:
+  - Maven downloads commons-lang3 version 3.12.0
+  - Adds to classpath automatically
+  - Includes all transitive dependencies
+  - Downloaded to: ~/.m2/repository/org/apache/commons/commons-lang3/3.12.0/
+
+TRANSITIVE DEPENDENCIES:
+
+If Project A depends on Library B, and Library B depends on Library C,
+then Project A automatically gets Library C too!
+
+Maven automatically resolves this dependency tree.
+
+================================================================================
+7. MAVEN COMMANDS
+================================================================================
+
+MOST COMMON COMMANDS:
+
+1. mvn clean
+   - Deletes target/ directory
+   - Removes previous build artifacts
+   - Use before building to ensure clean build
+
+2. mvn compile
+   - Compiles source code in src/main/java
+   - Generates bytecode in target/classes/
+   - Doesn't compile test code
+   - Downloads required dependencies
+
+3. mvn test-compile
+   - Compiles both production and test code
+   - Prepares for running tests
+
+4. mvn test
+   - Runs all unit tests in src/test/java
+   - Uses JUnit or TestNG framework
+   - Reports PASS/FAIL for each test
+   - Fails build if any test fails
+
+5. mvn package
+   - Runs compile + test + packaging
+   - Creates JAR/WAR file in target/
+   - Example: target/my-app-1.0-SNAPSHOT.jar
+
+6. mvn install
+   - Does package step
+   - Installs artifact to local repository (~/.m2/repository/)
+   - Makes it available for other local projects to use
+
+7. mvn deploy
+   - Uploads artifact to remote repository
+   - Requires credentials in settings.xml
+   - For sharing with team/public
+
+8. mvn clean install
+   - Combines: clean + compile + test + package + install
+   - Full build cycle, most commonly used
+
+9. mvn verify
+   - Runs integration tests (src/test/java/*IT.java)
+   - Checks build success
+   - More thorough than test
+
+COMBINED COMMANDS:
+
+mvn clean compile        - Clean and compile
+mvn clean package        - Clean, compile, test, package
+mvn clean test           - Clean and run tests only
+mvn clean install        - Clean, build, and install locally
+mvn clean verify         - Clean and full verification
+
+ADDITIONAL USEFUL COMMANDS:
+
+mvn dependency:tree
+  - Shows all dependencies and their versions
+  - Helps identify version conflicts
+
+mvn dependency:resolve
+  - Downloads all dependencies without building
+
+mvn dependency:copy-dependencies
+  - Copies all dependencies to target/dependency/
+
+mvn help:describe -Dplugin=maven-compiler-plugin
+  - Shows plugin configuration options
+
+mvn -v or mvn -version
+  - Shows Maven and Java versions
+
+mvn -q [command]
+  - Quiet mode, less output
+
+mvn -e [command]
+  - Shows detailed error information
+
+================================================================================
+8. MAVEN LIFECYCLE
+================================================================================
+
+Maven has predefined phases that run in order:
+
+1. validate          - Validates project structure
+2. compile           - Compiles source code
+3. test-compile      - Compiles test code
+4. test              - Runs unit tests
+5. package           - Creates JAR/WAR file
+6. verify            - Runs integration tests
+7. install           - Installs to local repository
+8. deploy            - Uploads to remote repository
+
+EXECUTION FLOW:
+
+When you run: mvn package
+
+Maven executes ALL phases UP TO package:
+  validate → compile → test-compile → test → package
+
+It does NOT run verify, install, or deploy.
+
+When you run: mvn install
+
+Maven executes ALL phases UP TO install:
+  validate ... → package → verify → install
+
+BUILD PLUGINS:
+
+Each phase can have multiple plugins executing goals:
+
+Example: compile phase
+  - maven-compiler-plugin compiles Java code
+  - maven-resources-plugin copies resources to target/
+
+Example: test phase
+  - maven-surefire-plugin runs JUnit tests
+  - maven-failsafe-plugin runs integration tests
+
+BUILD SUCCESS/FAILURE:
+
+If ANY phase fails, the entire build stops.
+Example: If a test fails in test phase, package and later phases don't run.
+
+================================================================================
+9. DEPENDENCY MANAGEMENT
+================================================================================
+
+FINDING DEPENDENCIES:
+
+1. Maven Central Repository
+   - URL: https://mvnrepository.com
+   - Or: https://search.maven.org
+   - Search by library name
+   - Copy dependency XML directly to pom.xml
+
+Example search "commons-lang3":
+  <dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-lang3</artifactId>
+    <version>3.12.0</version>
+  </dependency>
+
+2. GitHub project repositories
+   - Usually have README with Maven dependency info
+
+3. Official documentation
+   - Library websites often list Maven coordinates
+
+DEPENDENCY SCOPES:
+
+compile (default):
+  - Included in compilation, testing, and runtime
+  - Packaged in final JAR/WAR
+  - Example: spring-core, commons-lang
+
+test:
+  - Only used for compiling and running tests
+  - NOT included in final JAR
+  - Example: junit, mockito, testng
+
+provided:
+  - Compilation and testing, not runtime
+  - Runtime environment provides it
+  - Example: servlet-api (provided by Tomcat)
+
+runtime:
+  - Not used at compile time, but needed at runtime
+  - Included in final JAR
+  - Example: mysql-connector-java (database driver)
+
+system:
+  - Like provided, but explicitly reference local JAR file
+  - Use case: legacy libraries not in Maven Central
+  - Requires systemPath element
+
+DEPENDENCY VERSIONS:
+
+Exact version:
+  <version>3.12.0</version>
+
+Range (deprecated, don't use):
+  <version>[3.0,4.0)</version>  - 3.0 to 4.0 (4.0 excluded)
+
+RESOLVING CONFLICTS:
+
+Problem: Two dependencies need different versions of same library
+  Project needs: junit 4.12 AND junit 4.13
+
+Solution: Maven uses "nearest wins" strategy
+  Selects version closest to your project in dependency tree
+
+To explicitly set version, use dependencyManagement:
+
+<dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+    </dependency>
+  </dependencies>
+</dependencyManagement>
+
+Now all junit references use 4.13.2, regardless of transitive dependency versions.
+
+================================================================================
+10. MULTI-MODULE PROJECTS
+================================================================================
+
+For large projects divided into multiple modules:
+
+Example structure:
+  parent-project/
+  ├── pom.xml (packaging: pom)
+  ├── module1/
+  │   └── pom.xml
+  ├── module2/
+  │   └── pom.xml
+  └── module3/
+      └── pom.xml
+
+Parent pom.xml:
+```xml
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>parent-project</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>  <!-- IMPORTANT: pom type -->
+  
+  <modules>
+    <module>module1</module>
+    <module>module2</module>
+    <module>module3</module>
+  </modules>
+  
+  <dependencyManagement>
+    <!-- Shared dependency versions for all modules -->
+  </dependencyManagement>
+</project>
+```
+
+Module pom.xml:
+```xml
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>com.example</groupId>
+    <artifactId>parent-project</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  
+  <artifactId>module1</artifactId>
+  
+  <dependencies>
+    <!-- Module-specific dependencies -->
+  </dependencies>
+</project>
+```
+
+BENEFITS:
+  - Shared parent configuration
+  - Consistent versions across all modules
+  - Build all modules with: mvn clean install
+  - Modules can depend on each other
+
+================================================================================
+11. PROJECT ANALYSIS IN THIS FOLDER (2.Maven)
+================================================================================
+
+Current Projects Found:
+
+1. MavenDemo
+   ===================================
+   Location: 2.Maven/MavenDemo/
+   Type: Console Application (JAR)
+   Current Java Version: 22
+   Target Java Version: 25 (Latest LTS)
+   
+   Content:
+   - Basic Maven structure
+   - Likely demonstration project
+   - Uses Spring Framework (Spring Boot)
+   - Compiled JAR output
+   
+   Status: ✓ Successfully upgraded to Java 25 LTS
+   
+2. SpringBootMavenApp
+   ===================================
+   Location: 2.Maven/SpringBootMavenApp/
+   Type: Web Application
+   Framework: Spring Boot 4.1.0-M4 (pre-release version)
+   Current Java Version: 17
+   Target Java Version: 25 (Latest LTS)
+   
+   Content:
+   - Spring Boot web application
+   - REST API endpoints (likely)
+   - Database integration
+   - Complete src/ directory structure
+   - HELP.md documentation
+   
+   Features:
+   - Spring Web starter (spring-boot-starter-web)
+   - Spring Data JPA (database ORM)
+   - Spring Security (authentication/authorization)
+   - Logging with Logback
+   - Unit tests with JUnit 5
+   
+   Status: ✓ Successfully upgraded to Java 25 LTS
+
+3. StandaloneApplication (LEGACY - Not Maven)
+   ===================================
+   Location: 2.Maven/StandaloneApplication/
+   Type: Standalone Java Application (JAR files)
+   Status: ✗ NOT a Maven project (no pom.xml)
+   Note: Contains pre-built JAR files and dependencies
+   
+   This appears to be a traditional (pre-Maven) project structure
+   where dependencies were manually downloaded and managed.
+
+4. WebApplication (LEGACY - Not Found)
+   ===================================
+   Status: ✗ Does NOT exist in current workspace
+   Note: You asked about this, but it's not present
+
+RECOMMENDATIONS FOR THESE PROJECTS:
+
+For MavenDemo & SpringBootMavenApp:
+  ✓ Already Maven projects
+  ✓ Automatically uses standard structure
+  ✓ Can run: mvn clean install
+  ✓ Build reproducible and automated
+
+For StandaloneApplication:
+  Option 1: Convert to Maven
+    - Create pom.xml with dependencies
+    - Reorganize to src/main/java, src/test/java
+    - Delete manual JAR files
+    ✓ Benefit: Automated dependency management
+    
+  Option 2: Keep as legacy
+    - Use as reference/learning material
+    - Note differences with Maven approach
+    ✗ Drawback: Manual dependency management
+
+================================================================================
+12. BEST PRACTICES
+================================================================================
+
+NAMING CONVENTIONS:
+
+GroupId (Reverse Domain):
+  ✓ com.example
+  ✓ org.springframework
+  ✓ com.google
+  ✗ example.com (reverse it!)
+  ✗ MyApp (use lowercase, no spaces)
+
+ArtifactId:
+  ✓ my-application (lowercase, hyphens)
+  ✓ webapp-core
+  ✓ user-service
+  ✗ MyApplication (no uppercase)
+  ✗ my_application (hyphens, not underscores)
+
+Version (Semantic Versioning):
+  ✓ 1.0.0 (major.minor.patch)
+  ✓ 2.3.1-SNAPSHOT (development)
+  ✓ 1.0.0-RELEASE (production)
+  ✗ 1 (too vague)
+  ✗ v1.0.0 (no 'v' prefix)
+
+PVERSION:
+
+Always use SNAPSHOT for development:
+  <version>1.0.0-SNAPSHOT</version>  ✓ Development
+  <version>1.0.0</version>            ✓ Release only
+
+This distinguishes:
+  - SNAPSHOT: unstable, development
+  - Release: stable, production-ready
+
+DEPENDENCY MANAGEMENT:
+
+1. Keep dependencies up to date
+   - Check for security vulnerabilities
+   - Use mvn dependency:tree to see versions
+
+2. Minimize dependencies
+   - Only add what you actually use
+   - Reduces JAR size and build time
+   - Fewer potential conflicts
+
+3. Use version ranges carefully
+   - Avoid: <version>[1.0,2.0)</version>
+   - Prefer: exact versions for stability
+
+4. Document why you need each dependency
+   - Comment in pom.xml
+   - Helps future developers understand choices
+
+PLUGIN CONFIGURATION:
+
+Always specify plugin versions:
+  ✓ <version>3.10.1</version>
+  ✗ No version (unpredictable behavior)
+
+Use parent POMs for consistency:
+  - Spring Boot starter parent
+  - Company standard parent
+  - Reduces repetition across projects
+
+SEPARATION OF CONCERNS:
+
+Use profiles for environment-specific builds:
+
+<profiles>
+  <profile>
+    <id>dev</id>
+    <activation>
+      <activeByDefault>true</activeByDefault>
+    </activation>
+    <properties>
+      <app.environment>development</app.environment>
+    </properties>
+  </profile>
+  
+  <profile>
+    <id>prod</id>
+    <properties>
+      <app.environment>production</app.environment>
+    </properties>
+  </profile>
+</profiles>
+
+Build for production: mvn clean install -Pprod
+
+TESTING:
+
+Always test locally before committing:
+  mvn clean test
+
+Use integration tests for complex functionality:
+  Tests in src/test/java/*IT.java
+  Automatically run with: mvn verify
+
+CONTINUOUS INTEGRATION:
+
+Maven integrates well with CI/CD:
+  - GitHub Actions: mvn clean install
+  - Jenkins: Use Maven build step
+  - GitLab CI: Use Maven image
+
+Standard CI configuration:
+```yaml
+script:
+  - mvn clean
+  - mvn compile
+  - mvn test
+  - mvn package
+```
+
+FILE ORGANIZATION:
+
+Suggested project structure:
+  src/main/java/
+    ├── com/example/controller/     # REST/Web controllers
+    ├── com/example/service/        # Business logic
+    ├── com/example/repository/     # Database access
+    ├── com/example/model/          # Data models/entities
+    ├── com/example/config/         # Configuration classes
+    └── com/example/util/           # Utility classes
+
+  src/test/java/
+    ├── com/example/controller/     # Controller tests
+    ├── com/example/service/        # Service tests
+    └── com/example/integration/    # Integration tests
+  
+  src/main/resources/
+    ├── application.properties      # Config
+    ├── logback.xml                 # Logging
+    ├── templates/                  # HTML templates
+    └── static/                     # CSS, JS, images
+  
+  src/test/resources/
+    ├── application-test.properties
+    └── test-data/
+
+DOCUMENTATION:
+
+Maintain README.md with:
+  - Project description
+  - Prerequisites (Java version, Maven version)
+  - Build instructions
+  - Run instructions
+  - Development guidelines
+  - API documentation (if applicable)
+
+Example:
+```markdown
+# My Application
+
+## Prerequisites
+- Java 25 or higher
+- Maven 3.9 or higher
+
+## Build
+mvn clean install
+
+## Run
+java -jar target/my-app-1.0.jar
+
+## Testing
+mvn test
+```
+
+VERSION CONTROL:
+
+DO commit:
+  ✓ pom.xml
+  ✓ src/
+  ✓ README.md
+  ✓ .gitignore
+  ✓ .mvn/ (wrapper files)
+
+DO NOT commit:
+  ✗ target/ (build output)
+  ✗ .classpath, .project (IDE files)
+  ✗ .idea/ (IntelliJ files)
+  ✗ *.iml (IntelliJ project files)
+
+Use .gitignore:
+```
+target/
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+*.class
+```
+
+================================================================================
+SUMMARY
+================================================================================
+
+Maven is essential for Java project management because it:
+
+1. AUTOMATES builds (no manual compilation)
+2. MANAGES dependencies (automatic downloads)
+3. STANDARDIZES projects (everyone uses same structure)
+4. INTEGRATES with tools (IDEs, CI/CD)
+5. SCALES projects (multi-module support)
+6. ENSURES reproducibility (same build everywhere)
+
+The two Maven projects in 2.Maven/ folder:
+  - MavenDemo: Simple console application (Java 25)
+  - SpringBootMavenApp: Web framework application (Java 25)
+
+Both are now successfully upgraded to Java 25 LTS.
+
+For more information:
+  - https://maven.apache.org/
+  - https://mvnrepository.com (dependency search)
+  - Maven documentation: https://maven.apache.org/guides/
+
+================================================================================
+END OF MAVEN GUIDE
+================================================================================

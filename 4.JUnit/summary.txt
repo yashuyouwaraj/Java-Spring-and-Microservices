@@ -1,0 +1,1248 @@
+===============================================================================
+                               JUNIT COMPLETE SUMMARY
+===============================================================================
+1. WHAT IS JUNIT?
+===============================================================================
+
+JUnit is a Java testing framework used to write and run automated tests.
+
+In simple words:
+JUnit helps us check whether our Java code is working correctly without
+manually running the program again and again.
+
+It is mainly used for:
+- Unit testing
+- Re-running tests automatically after code changes
+- Catching bugs early
+- Making refactoring safer
+- Improving confidence in code quality
+
+Example:
+If we create a method:
+
+    int add(int a, int b) {
+        return a + b;
+    }
+
+We can write a JUnit test to verify:
+- add(2, 3) should return 5
+- add(0, 0) should return 0
+- add(-1, 1) should return 0
+
+Instead of checking manually every time, JUnit checks automatically.
+
+
+===============================================================================
+2. WHY JUNIT IS IMPORTANT
+===============================================================================
+
+Before JUnit, many developers tested code by:
+- printing values
+- running the program manually
+- checking output with their eyes
+
+Problems with manual testing:
+- slow
+- repetitive
+- error-prone
+- hard to repeat exactly
+- not suitable for large projects
+
+JUnit solves these problems by making tests:
+- automatic
+- repeatable
+- fast
+- organized
+- easy to include in builds and CI/CD pipelines
+
+
+===============================================================================
+3. WHAT KIND OF TESTING DOES JUNIT DO?
+===============================================================================
+
+JUnit is mainly for unit testing.
+
+Unit testing means:
+Testing a small piece of code in isolation, usually one method or one class.
+
+Examples:
+- testing a calculator add() method
+- testing a service method return value
+- testing validation logic
+- testing whether an exception is thrown for invalid input
+
+JUnit can also be used in:
+- integration-style tests
+- service-layer tests
+- repository tests
+- Spring Boot tests
+
+But by itself, JUnit is strongest as a unit testing framework.
+
+
+===============================================================================
+4. MAIN BENEFITS / ADVANTAGES OF JUNIT
+===============================================================================
+
+- Improves code quality
+- Finds bugs early
+- Makes refactoring safer
+- Saves time compared to repeated manual testing
+- Gives confidence before deployment
+- Encourages cleaner design
+- Helps document expected behavior
+- Integrates well with IDEs, Maven, Gradle, and CI/CD
+- Supports annotations that make tests easier to write
+- Supports exception testing, timeout testing, grouped assertions, and more
+
+In real projects, good JUnit tests help teams move faster with less fear.
+
+
+===============================================================================
+5. KEY TERMS YOU SHOULD KNOW
+===============================================================================
+
+1. Unit Test
+   A test for one small unit of code, often one method.
+
+2. Test Case
+   One individual test method.
+
+3. Test Class
+   A class that contains test methods.
+
+4. Assertion
+   A statement that checks whether expected and actual results match.
+
+5. Test Suite
+   A group of tests run together.
+
+6. Test Runner
+   The component that executes tests.
+
+7. Fixture
+   The setup data, objects, or environment needed for tests.
+
+8. Regression
+   A bug that appears after code changes break something that used to work.
+
+
+===============================================================================
+6. JUNIT VERSIONS
+===============================================================================
+
+Important versions:
+- JUnit 3
+- JUnit 4
+- JUnit 5
+
+Today, JUnit 5 is the preferred version for new projects.
+
+JUnit 5 has 3 major parts:
+
+1. JUnit Platform
+   The foundation for launching test frameworks on the JVM.
+
+2. JUnit Jupiter
+   The programming model and test engine for JUnit 5.
+   This is what we normally use in our code.
+
+3. JUnit Vintage
+   Allows older JUnit 3 and JUnit 4 tests to run on the JUnit Platform.
+
+
+===============================================================================
+7. JUNIT 4 VS JUNIT 5
+===============================================================================
+
+JUnit 4:
+- Older style
+- Uses `org.junit.Test`
+- Less flexible than JUnit 5
+
+JUnit 5:
+- Modern architecture
+- Uses `org.junit.jupiter.api.Test`
+- Better extensions
+- Better parameterized tests
+- Better lifecycle support
+- Better readability and organization
+
+Short conclusion:
+If you are starting fresh, use JUnit 5.
+
+
+===============================================================================
+8. STANDARD PROJECT STRUCTURE
+===============================================================================
+
+Typical Java project layout:
+
+src
+|-- main
+|   `-- java
+|       `-- production code
+`-- test
+    `-- java
+        `-- test code
+
+Meaning:
+- `src/main/java`  -> actual application code
+- `src/test/java`  -> JUnit test classes
+
+Common naming style:
+- `CalculatorTest`
+- `ShapesTest`
+- `UserServiceTest`
+
+
+===============================================================================
+9. FIRST JUNIT TEST
+===============================================================================
+
+Example production class:
+
+```java
+public class Calculator {
+    public int add(int a, int b) {
+        return a + b;
+    }
+}
+```
+
+Example test class:
+
+```java
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
+class CalculatorTest {
+
+    @Test
+    void shouldAddTwoNumbers() {
+        Calculator calculator = new Calculator();
+        int result = calculator.add(2, 3);
+        assertEquals(5, result);
+    }
+}
+```
+
+What is happening here:
+- `@Test` marks the method as a test
+- JUnit runs that method
+- `assertEquals(5, result)` checks if the result is correct
+- if equal, test passes
+- if not equal, test fails
+
+
+===============================================================================
+10. MOST IMPORTANT ANNOTATIONS
+===============================================================================
+
+`@Test`
+- Marks a method as a test method
+
+`@BeforeEach`
+- Runs before every test method
+- Used for repeated setup
+
+`@AfterEach`
+- Runs after every test method
+- Used for cleanup
+
+`@BeforeAll`
+- Runs once before all tests in the class
+- Usually static
+
+`@AfterAll`
+- Runs once after all tests in the class
+- Usually static
+
+`@DisplayName`
+- Gives a readable custom name to a test
+
+`@Disabled`
+- Skips a test temporarily
+
+`@Nested`
+- Groups related tests inside inner classes
+
+`@RepeatedTest`
+- Runs the same test many times
+
+`@ParameterizedTest`
+- Runs one test with multiple inputs
+
+`@Timeout`
+- Fails the test if it takes too long
+
+
+===============================================================================
+11. TEST LIFECYCLE EXAMPLE
+===============================================================================
+
+```java
+import org.junit.jupiter.api.*;
+
+class LifecycleTest {
+
+    @BeforeAll
+    static void initAll() {
+        System.out.println("Runs once before all tests");
+    }
+
+    @BeforeEach
+    void init() {
+        System.out.println("Runs before each test");
+    }
+
+    @Test
+    void testOne() {
+        System.out.println("Test one");
+    }
+
+    @Test
+    void testTwo() {
+        System.out.println("Test two");
+    }
+
+    @AfterEach
+    void cleanup() {
+        System.out.println("Runs after each test");
+    }
+
+    @AfterAll
+    static void cleanupAll() {
+        System.out.println("Runs once after all tests");
+    }
+}
+```
+
+Order of execution:
+1. `@BeforeAll`
+2. `@BeforeEach`
+3. test method
+4. `@AfterEach`
+5. `@BeforeEach`
+6. next test method
+7. `@AfterEach`
+8. `@AfterAll`
+
+
+===============================================================================
+12. ASSERTIONS IN JUNIT
+===============================================================================
+
+Assertions are the heart of testing.
+They verify that the actual result matches what we expect.
+
+Common import:
+
+```java
+import static org.junit.jupiter.api.Assertions.*;
+```
+
+Most used assertions:
+
+`assertEquals(expected, actual)`
+- checks equality
+
+`assertNotEquals(unexpected, actual)`
+- checks values are different
+
+`assertTrue(condition)`
+- checks a condition is true
+
+`assertFalse(condition)`
+- checks a condition is false
+
+`assertNull(value)`
+- checks value is null
+
+`assertNotNull(value)`
+- checks value is not null
+
+`assertSame(expected, actual)`
+- checks both references point to the same object
+
+`assertNotSame(unexpected, actual)`
+- checks references are different
+
+`assertArrayEquals(expectedArray, actualArray)`
+- compares arrays
+
+`assertThrows(...)`
+- checks an exception is thrown
+
+`assertDoesNotThrow(...)`
+- checks no exception is thrown
+
+`assertAll(...)`
+- groups multiple assertions
+
+
+===============================================================================
+13. ASSERTION EXAMPLES
+===============================================================================
+
+```java
+assertEquals(10, 5 + 5);
+assertNotEquals(9, 5 + 5);
+assertTrue(10 > 1);
+assertFalse(10 < 1);
+assertNull(null);
+assertNotNull("JUnit");
+```
+
+Array example:
+
+```java
+int[] expected = {1, 2, 3};
+int[] actual = {1, 2, 3};
+assertArrayEquals(expected, actual);
+```
+
+Grouped assertion example:
+
+```java
+assertAll(
+    () -> assertEquals("Aman", "Aman"),
+    () -> assertTrue(20 > 10),
+    () -> assertNotNull("Java")
+);
+```
+
+
+===============================================================================
+14. TESTING EXCEPTIONS
+===============================================================================
+
+One very important use of JUnit is checking that invalid input throws the
+correct exception.
+
+Example:
+
+```java
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.Test;
+
+class ExceptionTest {
+
+    @Test
+    void shouldThrowArithmeticException() {
+        assertThrows(ArithmeticException.class, () -> {
+            int result = 10 / 0;
+        });
+    }
+}
+```
+
+Another example:
+
+```java
+IllegalArgumentException ex = assertThrows(
+    IllegalArgumentException.class,
+    () -> validateAge(-1)
+);
+```
+
+Why useful:
+- checks business validation
+- checks error handling
+- prevents silent failures
+
+
+===============================================================================
+15. PARAMETERIZED TESTS
+===============================================================================
+
+Sometimes we want to run the same test with many different inputs.
+Parameterized tests are the solution.
+
+Example using `@ValueSource`:
+
+```java
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+class EvenNumberTest {
+
+    @ParameterizedTest
+    @ValueSource(ints = {2, 4, 6, 8})
+    void shouldBeEven(int number) {
+        assertTrue(number % 2 == 0);
+    }
+}
+```
+
+Example using `@CsvSource`:
+
+```java
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+class MathTest {
+
+    @ParameterizedTest
+    @CsvSource({
+        "2, 3, 5",
+        "4, 5, 9",
+        "10, 20, 30"
+    })
+    void shouldAddNumbers(int a, int b, int expected) {
+        assertEquals(expected, a + b);
+    }
+}
+```
+
+Benefits:
+- avoids duplicate test methods
+- improves coverage
+- keeps tests short and clear
+
+
+===============================================================================
+16. REPEATED TESTS
+===============================================================================
+
+Used when a test should run multiple times.
+Helpful for unstable logic, random behavior, or repeated validation.
+
+Example:
+
+```java
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.RepeatedTest;
+
+class RepeatTestExample {
+
+    @RepeatedTest(5)
+    void shouldRunFiveTimes() {
+        assertTrue(100 > 1);
+    }
+}
+```
+
+
+===============================================================================
+17. DISPLAY NAMES
+===============================================================================
+
+Display names make test output easier to read.
+
+Example:
+
+```java
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+class DisplayNameTest {
+
+    @Test
+    @DisplayName("Addition should return correct result")
+    void testAdd() {
+        assertEquals(5, 2 + 3);
+    }
+}
+```
+
+
+===============================================================================
+18. DISABLING TESTS
+===============================================================================
+
+If a test is temporarily not ready, you can disable it.
+
+Example:
+
+```java
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
+class DisabledTestExample {
+
+    @Disabled("Temporarily disabled until bug is fixed")
+    @Test
+    void testFeature() {
+    }
+}
+```
+
+Use this carefully.
+Do not leave important tests disabled for too long.
+
+
+===============================================================================
+19. TIMEOUT TESTING
+===============================================================================
+
+Timeouts help ensure code does not take too long.
+
+Example:
+
+```java
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
+
+class TimeoutTestExample {
+
+    @Test
+    @Timeout(2)
+    void shouldFinishWithinTwoSeconds() throws InterruptedException {
+        Thread.sleep(1000);
+    }
+}
+```
+
+This is useful for performance-sensitive logic.
+
+
+===============================================================================
+20. NESTED TESTS
+===============================================================================
+
+Nested tests help organize related scenarios.
+
+Example:
+
+```java
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+class UserServiceTest {
+
+    @Nested
+    class LoginTests {
+
+        @Test
+        void shouldLoginWithValidCredentials() {
+        }
+
+        @Test
+        void shouldFailWithInvalidPassword() {
+        }
+    }
+}
+```
+
+This improves readability in larger test classes.
+
+
+===============================================================================
+21. ARRANGE - ACT - ASSERT STYLE
+===============================================================================
+
+A very common and recommended test-writing style is:
+
+1. Arrange
+   Prepare objects and input data
+
+2. Act
+   Call the method being tested
+
+3. Assert
+   Check the result
+
+Example:
+
+```java
+@Test
+void shouldReturnSquareArea() {
+    // Arrange
+    Shapes shapes = new Shapes();
+
+    // Act
+    int area = shapes.computeSquareArea(4);
+
+    // Assert
+    assertEquals(16, area);
+}
+```
+
+This style makes tests easy to read.
+
+
+===============================================================================
+22. HOW TO ADD JUNIT IN A MAVEN PROJECT
+===============================================================================
+
+Add JUnit 5 dependency in `pom.xml`.
+
+Example:
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>5.10.2</version>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.2.5</version>
+        </plugin>
+    </plugins>
+</build>
+```
+
+Meaning:
+- dependency adds JUnit to the project
+- `scope` is `test`, so it is only used for testing
+- Surefire plugin runs unit tests in Maven
+
+
+===============================================================================
+23. HOW TO RUN JUNIT TESTS IN MAVEN
+===============================================================================
+
+Run all tests:
+
+```bash
+mvn test
+```
+
+Clean and run tests:
+
+```bash
+mvn clean test
+```
+
+Run one test class:
+
+```bash
+mvn -Dtest=CalculatorTest test
+```
+
+Run one specific test method:
+
+```bash
+mvn -Dtest=CalculatorTest#shouldAddTwoNumbers test
+```
+
+What happens when you run `mvn test`:
+- Maven compiles source code
+- Maven compiles test code
+- Surefire finds test classes
+- JUnit tests are executed
+- Maven shows passed and failed test results
+
+
+===============================================================================
+24. HOW TO ADD JUNIT IN A GRADLE PROJECT
+===============================================================================
+
+Groovy DSL example (`build.gradle`):
+
+```groovy
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+}
+
+test {
+    useJUnitPlatform()
+}
+```
+
+Kotlin DSL example (`build.gradle.kts`):
+
+```kotlin
+dependencies {
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+```
+
+Important:
+`useJUnitPlatform()` is required for JUnit 5 in Gradle.
+
+
+===============================================================================
+25. HOW TO RUN JUNIT TESTS IN GRADLE
+===============================================================================
+
+Run all tests:
+
+```bash
+gradle test
+```
+
+Using Gradle Wrapper:
+
+```bash
+./gradlew test
+```
+
+On Windows:
+
+```bash
+gradlew.bat test
+```
+
+Clean and run:
+
+```bash
+gradle clean test
+```
+
+Run one test class:
+
+```bash
+gradle test --tests CalculatorTest
+```
+
+Run one specific test method:
+
+```bash
+gradle test --tests CalculatorTest.shouldAddTwoNumbers
+```
+
+
+===============================================================================
+26. HOW TO CREATE A JUNIT TEST CLASS
+===============================================================================
+
+Basic steps:
+
+1. Create your Java class inside `src/main/java`
+2. Create a test class inside `src/test/java`
+3. Import JUnit classes
+4. Write a method with `@Test`
+5. Use assertions
+6. Run the tests
+
+Example:
+
+Step 1: Production class
+
+```java
+public class MessageUtil {
+    public String greet(String name) {
+        return "Hello " + name;
+    }
+}
+```
+
+Step 2: Test class
+
+```java
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
+class MessageUtilTest {
+
+    @Test
+    void shouldReturnGreetingMessage() {
+        MessageUtil util = new MessageUtil();
+        assertEquals("Hello Aman", util.greet("Aman"));
+    }
+}
+```
+
+
+===============================================================================
+27. HOW TESTS ARE NAMED
+===============================================================================
+
+Good test names should describe behavior clearly.
+
+Bad names:
+- `test1`
+- `demo`
+- `abc`
+
+Good names:
+- `shouldReturnSquareAreaWhenSideIs4`
+- `shouldThrowExceptionWhenAgeIsNegative`
+- `shouldNotAllowCoursePurchaseForNonPremiumUser`
+
+A good test name tells:
+- what is being tested
+- under what condition
+- what should happen
+
+
+===============================================================================
+28. BEST PRACTICES
+===============================================================================
+
+- Keep tests simple
+- Test one behavior at a time
+- Write clear test names
+- Make tests independent
+- Do not depend on test execution order
+- Use setup methods for repeated initialization
+- Cover normal, edge, and invalid cases
+- Avoid unnecessary logic inside tests
+- Keep tests fast
+- Refactor tests when they become hard to understand
+- Treat failing tests seriously
+- Fix flaky tests quickly
+
+Very important:
+A test should help, not confuse.
+
+
+===============================================================================
+29. WHAT MAKES A GOOD UNIT TEST?
+===============================================================================
+
+A good unit test is:
+- fast
+- isolated
+- repeatable
+- readable
+- focused
+- reliable
+
+Many developers remember this idea:
+Good tests should be small, clear, and trustworthy.
+
+
+===============================================================================
+30. COMMON MISTAKES
+===============================================================================
+
+- Writing tests with unclear names
+- Putting too much logic inside tests
+- Depending on database or network in unit tests
+- Depending on test execution order
+- Forgetting edge cases
+- Using wrong assertions
+- Not checking exceptions
+- Keeping broken tests ignored for a long time
+- Writing tests but never running them in build tools
+
+
+===============================================================================
+31. EDGE CASES YOU SHOULD TEST
+===============================================================================
+
+When writing tests, do not test only the happy path.
+
+Also test:
+- null values
+- empty strings
+- zero
+- negative numbers
+- maximum and minimum values
+- invalid input
+- duplicate values
+- boundary conditions
+
+Example:
+If testing array sorting, check:
+- normal array
+- empty array
+- single-element array
+- already sorted array
+- reverse sorted array
+- array with duplicates
+
+
+===============================================================================
+32. JUNIT AND TDD
+===============================================================================
+
+JUnit is commonly used in TDD (Test-Driven Development).
+
+TDD cycle:
+1. Write a failing test
+2. Write minimum code to pass the test
+3. Refactor the code
+4. Run tests again
+
+Benefits:
+- better design
+- better requirement clarity
+- safer refactoring
+- stronger confidence
+
+
+===============================================================================
+33. JUNIT WITH IDES
+===============================================================================
+
+IntelliJ IDEA:
+- right click a test class
+- click Run
+
+Eclipse:
+- right click
+- Run As -> JUnit Test
+
+VS Code:
+- install Java support / Java Extension Pack
+- use the Testing panel
+- or click `Run Test` above test methods
+
+IDEs make JUnit much easier to use during development.
+
+
+===============================================================================
+34. JUNIT IN CI/CD
+===============================================================================
+
+JUnit fits naturally into automated pipelines.
+
+Example flow:
+- developer pushes code
+- build starts
+- Maven or Gradle runs tests
+- if tests fail, build fails
+- if tests pass, deployment can continue
+
+This helps catch issues before production.
+
+
+===============================================================================
+35. TOOLS OFTEN USED ALONG WITH JUNIT
+===============================================================================
+
+Mockito
+- used to mock dependencies
+
+AssertJ
+- provides fluent and readable assertions
+
+Hamcrest
+- matcher-based assertions
+
+JaCoCo
+- code coverage reporting
+
+Maven Surefire
+- runs unit tests in Maven
+
+Maven Failsafe
+- commonly used for integration tests
+
+Spring Test / Spring Boot Test
+- for testing Spring applications
+
+
+===============================================================================
+36. WHAT JUNIT DOES NOT DO ALONE
+===============================================================================
+
+JUnit is powerful, but it does not replace everything.
+
+JUnit alone does not handle:
+- mocking complex dependencies
+- full browser UI testing
+- load testing
+- production monitoring
+- code coverage reporting
+
+For these, we combine JUnit with other tools.
+
+
+===============================================================================
+37. SIMPLE REAL-WORLD EXAMPLE
+===============================================================================
+
+Production class:
+
+```java
+public class DiscountService {
+    public double calculateDiscount(double price, boolean premium) {
+        if (premium) {
+            return price * 0.8;
+        }
+        return price;
+    }
+}
+```
+
+Test class:
+
+```java
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
+class DiscountServiceTest {
+
+    @Test
+    void shouldApplyDiscountForPremiumUser() {
+        DiscountService service = new DiscountService();
+        assertEquals(80.0, service.calculateDiscount(100.0, true));
+    }
+
+    @Test
+    void shouldNotApplyDiscountForRegularUser() {
+        DiscountService service = new DiscountService();
+        assertEquals(100.0, service.calculateDiscount(100.0, false));
+    }
+}
+```
+
+This is the kind of practical test you write in real applications.
+
+
+===============================================================================
+38. INTERVIEW / EXAM POINTS
+===============================================================================
+
+If someone asks you "What is JUnit?", a strong answer is:
+
+"JUnit is a Java testing framework used to write and run automated tests,
+especially unit tests. It helps verify code correctness, catch bugs early,
+support refactoring, and integrate testing into build tools like Maven and
+Gradle."
+
+Important quick points:
+- JUnit is for automated testing in Java
+- most commonly used for unit testing
+- modern version is JUnit 5
+- `@Test` marks a test method
+- assertions verify expected results
+- tests usually go in `src/test/java`
+- Maven and Gradle can run JUnit tests
+
+
+===============================================================================
+39. QUICK COMPARISON: MANUAL TESTING VS JUNIT
+===============================================================================
+
+Manual testing:
+- slow
+- repeated by hand
+- easy to miss cases
+- hard to scale
+
+JUnit testing:
+- automated
+- repeatable
+- faster
+- easier to include in builds
+- more reliable over time
+
+
+===============================================================================
+40. WHEN TO USE JUNIT
+===============================================================================
+
+Use JUnit when you want to:
+- test methods automatically
+- protect existing features during refactoring
+- validate business rules
+- verify exception handling
+- improve reliability of Java applications
+- support continuous integration
+
+
+===============================================================================
+41. WHEN NOT TO RELY ON ONLY JUNIT
+===============================================================================
+
+JUnit is not enough by itself if you need:
+- full end-to-end browser testing
+- heavy performance benchmarking
+- API contract testing alone
+- advanced mocking without extra libraries
+
+In those cases, JUnit is still useful, but you add other tools too.
+
+
+===============================================================================
+42. VERY SHORT REVISION SHEET
+===============================================================================
+
+Framework name:
+JUnit
+
+Language:
+Java
+
+Main purpose:
+Automated testing
+
+Most common use:
+Unit testing
+
+Recommended version:
+JUnit 5
+
+Main annotation:
+`@Test`
+
+Useful lifecycle annotations:
+`@BeforeEach`, `@AfterEach`, `@BeforeAll`, `@AfterAll`
+
+Common assertions:
+`assertEquals`, `assertTrue`, `assertFalse`, `assertThrows`
+
+Maven command:
+`mvn test`
+
+Gradle command:
+`gradle test`
+
+Test folder:
+`src/test/java`
+
+
+===============================================================================
+43. FINAL TAKEAWAY
+===============================================================================
+
+JUnit is one of the most important tools in Java development.
+
+If you understand:
+- how to create a test class
+- how to use `@Test`
+- how to use assertions
+- how to test exceptions
+- how to use lifecycle methods
+- how to run tests in Maven and Gradle
+
+then you already have a strong practical foundation.
+
+Learning JUnit well will help you in:
+- Java interviews
+- backend development
+- Spring Boot projects
+- clean coding
+- professional software development
+
+
+===============================================================================
+44. MEMORY TRICK
+===============================================================================
+
+Remember JUnit like this:
+
+J  -> Java testing
+U  -> Unit tests
+N  -> Necessary for reliable code
+I  -> Improves confidence
+T  -> Tests run automatically
+
+
+===============================================================================
+45. RECOMMENDED LEARNING ORDER
+===============================================================================
+
+1. Learn `@Test`
+2. Learn basic assertions
+3. Learn lifecycle methods
+4. Learn exception testing
+5. Learn parameterized tests
+6. Learn Maven and Gradle execution
+7. Learn Mockito and coverage tools later
+
+
+===============================================================================
+END OF SUMMARY
+===============================================================================

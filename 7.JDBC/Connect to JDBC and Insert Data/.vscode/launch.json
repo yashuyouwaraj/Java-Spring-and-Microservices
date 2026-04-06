@@ -5,15 +5,7 @@
             "type": "java",
             "name": "Run App",
             "request": "launch",
-            "mainClass": "com.yashu.App",
-            "projectName": "FirstJDBCapp"
-        },
-        {
-            "type": "java",
-            "name": "Run Launch1",
-            "request": "launch",
-            "mainClass": "com.yashu.Launch1",
-            "projectName": "FirstJDBCapp"
+            "mainClass": "com.yashu.App"
         }
     ]
 }

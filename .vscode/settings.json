@@ -1,14 +1,14 @@
 {
   "java.project.sourcePaths": [
-    "7.JDBC\\FirstJDBCapp\\src"
+    "7.JDBC/Crud Operations/src",
+    "7.JDBC/Connect to JDBC and Insert Data/src"
   ],
-  "java.project.outputPath": "7.JDBC\\FirstJDBCapp\\bin",
+  "java.project.outputPath": "bin",
   "java.project.referencedLibraries": [
-    "7.JDBC\\FirstJDBCapp\\lib\\**\\*.jar"
+    "7.JDBC/Crud Operations/lib/**/*.jar",
+    "7.JDBC/Connect to JDBC and Insert Data/lib/**/*.jar",
+    "7.JDBC/mysql-connector-j-9.6.0/**/*.jar"
   ],
-  "code-runner.fileDirectoryAsCwd": false,
-  "code-runner.runInTerminal": true,
-  "code-runner.executorMap": {
-    "java": "cd \"$workspaceRoot/7.JDBC/FirstJDBCapp\"; if (!(Test-Path bin)) { New-Item -ItemType Directory -Path bin | Out-Null }; javac -cp \"lib/*\" -d bin \"src/com/yashu/$fileName\"; if ($?) { java -cp \"bin;lib/*\" com.yashu.$fileNameWithoutExt }"
-  }
+  "java.debug.settings.onBuildFailureProceed": true,
+  "code-runner.runInTerminal": true
 }

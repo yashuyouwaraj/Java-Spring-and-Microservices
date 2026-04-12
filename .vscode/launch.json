@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "SpringbootrestApplication",
+            "request": "launch",
+            "mainClass": "com.yashu.rest.springbootrest.SpringbootrestApplication"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-SpringdemoApplication<springdemo>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.yashu.springdemo.SpringdemoApplication",
+            "projectName": "springdemo",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

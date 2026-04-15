@@ -18,6 +18,10 @@ public class Product {
         return prodId;
     }
 
+    public void setProdId(int prodId) {
+        this.prodId = prodId;
+    }
+
     public String getProdName() {
         return prodName;
     }
@@ -32,9 +36,5 @@ public class Product {
 
     public void setPrice(int price) {
         this.price = price;
-    }
-
-    public void setProdId(int prodId) {
-        this.prodId = prodId;
     }
 }

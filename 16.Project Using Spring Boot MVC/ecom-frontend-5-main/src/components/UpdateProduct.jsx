@@ -9,12 +9,12 @@ const UpdateProduct = () => {
   const [updateProduct, setUpdateProduct] = useState({
     id: null,
     name: "",
-    description: "",
+    desc: "",
     brand: "",
     price: "",
     category: "",
     releaseDate: "",
-    productAvailable: false,
+    available: false,
     stockQuantity: "",
   });
 
@@ -136,10 +136,10 @@ const UpdateProduct = () => {
             <input
               type="text"
               className="form-control"
-              placeholder={product.description}
-              name="description"
+              placeholder={product.desc}
+              name="desc"
               onChange={handleChange}
-              value={updateProduct.description}
+              value={updateProduct.desc}
               id="description"
             />
           </div>
@@ -221,11 +221,11 @@ const UpdateProduct = () => {
               <input
                 className="form-check-input"
                 type="checkbox"
-                name="productAvailable"
+                name="available"
                 id="gridCheck"
-                checked={updateProduct.productAvailable}
+                checked={updateProduct.available}
                 onChange={(e) =>
-                  setUpdateProduct({ ...updateProduct, productAvailable: e.target.checked })
+                  setUpdateProduct({ ...updateProduct, available: e.target.checked })
                 }
               />
               <label className="form-check-label">Product Available</label>

@@ -95,7 +95,7 @@ const Product = () => {
             </h1>
             <i style={{ marginBottom: "3rem" }}>{product.brand}</i>
             <p style={{fontWeight:'bold',fontSize:'1rem',margin:'10px 0px 0px'}}>PRODUCT DESCRIPTION :</p>
-            <p style={{ marginBottom: "1rem" }}>{product.description}</p>
+            <p style={{ marginBottom: "1rem" }}>{product.desc}</p>
           </div>
 
           <div className="product-price">
@@ -104,10 +104,10 @@ const Product = () => {
             </span>
             <button
               className={`cart-btn ${
-                !product.productAvailable ? "disabled-btn" : ""
+                !product.available ? "disabled-btn" : ""
               }`}
               onClick={handlAddToCart}
-              disabled={!product.productAvailable}
+              disabled={!product.available}
               style={{
                 padding: "1rem 2rem",
                 fontSize: "1rem",
@@ -119,7 +119,7 @@ const Product = () => {
                 marginBottom: "1rem",
               }}
             >
-              {product.productAvailable ? "Add to cart" : "Out of Stock"}
+              {product.available ? "Add to cart" : "Out of Stock"}
             </button>
             <h6 style={{ marginBottom: "1rem" }}>
               Stock Available :{" "}

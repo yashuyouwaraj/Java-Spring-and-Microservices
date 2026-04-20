@@ -10,3 +10,5 @@
 2026-04-19 20:44:20,170: org.springframework.web.servlet.DispatcherServlet : INFO --> Initializing Servlet 'dispatcherServlet' : initServletBean : 
 2026-04-19 20:44:20,172: org.springframework.web.servlet.DispatcherServlet : INFO --> Completed initialization in 2 ms : initServletBean : 
 2026-04-19 20:44:20,210: com.yashu.SpringbootLog4j2.Controller.GreetingsController : INFO --> Control in api1 : generateGreetings : 
+2026-04-19 20:45:59,658: org.springframework.boot.tomcat.GracefulShutdown : INFO --> Commencing graceful shutdown. Waiting for active requests to complete : shutDownGracefully : 
+2026-04-19 20:45:59,671: org.springframework.boot.tomcat.GracefulShutdown : INFO --> Graceful shutdown complete : doShutdown : 
